@@ -85,9 +85,17 @@ class _StatCard extends StatelessWidget {
       ),
       child:Column(
         children: [
-          Icon(icon, color: Colors.green),
+          Icon(
+            icon,             
+            color: Color.fromARGB(255, 6, 102, 9)),
           const SizedBox(height: 8),
-          Text(label, style: const TextStyle(fontSize:13)),
+          Text(
+            label, 
+          style: const TextStyle(
+            fontSize:13,
+            color: Color.fromARGB(255, 6, 102, 9),
+            fontWeight: FontWeight.w300,
+            )),
         ],
       )
     );
