@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-
+import 'package:provider/provider.dart';
+import 'car_provider.dart';
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -19,9 +20,25 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold( 
       appBar: AppBar(
-          title: const Text('ViveroMax'),
-          backgroundColor: Colors.green.shade400,
+          title: const Text(
+            'Vivero+',
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
         ),
+        actions:[Padding(padding: const EdgeInsets.only(right: 16),
+        child:Center(
+          child:Text(
+          '🛒${context.watch<CartProvider>().cantidad}',
+          style: const TextStyle(fontSize: 18, color: Colors.white),
+        ),
+        ),
+        )],
+        backgroundColor: Colors.green.shade400,
+
+      ),
         body: Center(
           child: Padding(
             padding: const EdgeInsets.all(24),
@@ -69,6 +86,14 @@ class _HomeScreenState extends State<HomeScreen> {
                     esFavorito ? 'En favoritos' : 'Agregar a favoritos'
                   ),
                 ),
+                const SizedBox(height: 12),
+                ElevatedButton.icon(
+                  onPressed: (){
+                    context.read<CartProvider>().agregarAlCarrito();
+                  },
+                  icon: const Icon(Icons.add_shopping_cart),
+                  label: const Text('Agregar al Carrito')
+                  ),
                 const SizedBox(height: 24),
                 Row(
                   children: [
