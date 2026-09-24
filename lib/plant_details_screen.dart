@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'car_provider.dart';
 import 'package:provider/provider.dart';
 import 'car_provider.dart';
 
@@ -19,9 +18,20 @@ class PlantDetailsScreen extends StatelessWidget{
           children: [
             const Icon(Icons.local_florist, size: 80,color: Colors.green),
             SizedBox(height: 16),
-            Text(nombrePlanta,
+            Text(
+              nombrePlanta,
             style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
+            const SizedBox(height: 24),
+            ElevatedButton.icon(
+              onPressed: (){
+              context.read<CartProvider>().agregarAlCarrito();
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('$nombrePlanta agregada al carrito'),),
+                );
+            },
+            icon: const Icon(Icons.add_shopping_cart), 
+            label: const Text('Agregar al Carrito'))
           ],
         ),
         ),
