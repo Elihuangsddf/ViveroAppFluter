@@ -5,7 +5,8 @@ import 'car_provider.dart';
 
 class PlantDetailsScreen extends StatelessWidget{
   final String nombrePlanta;
-  const PlantDetailsScreen({super.key, required this.nombrePlanta});
+  final String rutaImagen;
+  const PlantDetailsScreen({super.key, required this.nombrePlanta, required this.rutaImagen});
   
   @override
   Widget build(BuildContext context){
