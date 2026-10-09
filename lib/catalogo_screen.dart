@@ -10,34 +10,40 @@ class CatalogoScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Catálogo')),
-      body: GridView.builder(
-        padding: const EdgeInsets.all(16),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          crossAxisSpacing: 12,
-          mainAxisSpacing: 12,
-        ),
-        itemCount: plantasDemo.length,
-        itemBuilder: (context, index) {
-          final planta = plantasDemo[index];
-          return Hero(
-            tag: planta.nombre,
-            child: PlantCard(
-              nombre: planta.nombre,
-              precio: planta.precio,
-              rutaImagen: planta.rutaImagen,
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => PlantDetailsScreen(
-                      nombrePlanta: planta.nombre,
-                      rutaImagen: planta.rutaImagen,
-                    ),
-                  ),
-                );
-              },
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          final columnas = constraints.maxWidth < 600 ? 2 : 3;
+          return GridView.builder(
+            padding: const EdgeInsets.all(16),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: columnas,
+              crossAxisSpacing: 16,
+              mainAxisSpacing: 16,
+              childAspectRatio: 0.78,
             ),
+            itemCount: plantasDemo.length,
+            itemBuilder: (context, index) {
+              final planta = plantasDemo[index];
+              return Hero(
+                tag: planta.nombre,
+                child: PlantCard(
+                  nombre: planta.nombre,
+                  precio: planta.precio,
+                  rutaImagen: planta.rutaImagen,
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => PlantDetailsScreen(
+                          nombrePlanta: planta.nombre,
+                          rutaImagen: planta.rutaImagen,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              );
+            },
           );
         },
       ),

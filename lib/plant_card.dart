@@ -19,17 +19,17 @@ class PlantCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(16),
+      borderRadius: BorderRadius.circular(20),
       child: Container(
-        padding: const EdgeInsets.all(AppSpacing.md),
+        padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.05),
-              blurRadius: 8,
-              offset: const Offset(0, 2),
+              color: AppColors.primario.withValues(alpha: 0.08),
+              blurRadius: 12,
+              offset: const Offset(0, 4),
             ),
           ],
         ),
@@ -37,21 +37,35 @@ class PlantCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            AspectRatio(aspectRatio: 1,
-              child: Image.asset(
-                rutaImagen,
-                fit: BoxFit.cover,
+            Expanded(
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(14),
+                child: SizedBox.expand(
+                  child: Image.asset(rutaImagen, fit: BoxFit.cover),
+                ),
               ),
             ),
-            Padding(padding: const EdgeInsets.all(12),
-            child: Column(
-              crossAxisAlignment:CrossAxisAlignment.start,
-              children: [
-                Text(nombre, style:const TextStyle(fontWeight: .w600),),
-                const SizedBox(height: 4,),
-                Text(precio, style: const TextStyle(fontWeight: FontWeight.w400),),
-              ],
+            const SizedBox(height: 10),
+            Text(
+              nombre,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                color: AppColors.textoPrincipal,
+                fontWeight: FontWeight.w600,
+                fontSize: 16,
+              ),
             ),
+            const SizedBox(height: 4),
+            Text(
+              precio,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                color: AppColors.primario,
+                fontWeight: FontWeight.w600,
+                fontSize: 14,
+              ),
             ),
           ],
         ),

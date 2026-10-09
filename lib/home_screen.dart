@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import 'car_provider.dart';
 import 'plant_details_screen.dart';
+import 'catalogo_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -53,15 +54,10 @@ class _HomeScreenState extends State<HomeScreen> {
               Stack(
                 children: [
                   Container(
-                    padding: const EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                      color: Colors.green,
-                      borderRadius: BorderRadius.circular(100),
-                    ),
-                    child: const Icon(
-                      Icons.eco,
-                      size: 100,
-                      color: Color.fromARGB(255, 6, 102, 9),
+                    child:Image.asset(
+                      'ImgPlants/logoPrincipal.png',
+                      width: 300,
+                      height: 300,
                     ),
                   ),
                 ],
@@ -118,7 +114,26 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                 ],
+                ),
+                SizedBox(height: 24),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                  ElevatedButton.icon(
+                    onPressed: (){
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const CatalogoScreen(),
+                        ),
+                      );
+                    }, 
+                    icon: const Icon(Icons.store),
+                    label: const Text('Ver Catálogo'),
+                  ),
+                ],
               ),
+              
               const SizedBox(height: 24),
               Row(
                 children: [
@@ -130,6 +145,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           MaterialPageRoute(
                             builder: (context) => const PlantDetailsScreen(
                               nombrePlanta: 'Monstera',
+                              rutaImagen: 'ImgPlants/01-monstera-deliciosa.png',
                             ),
                           ),
                         );

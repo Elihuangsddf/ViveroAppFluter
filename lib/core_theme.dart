@@ -9,11 +9,11 @@ class AppColors {
 }
 
 class AppSpacing {
-  static const double xs = 4;
-  static const double sm = 8;
-  static const double md = 16;
-  static const double lg = 24;
-  static const double xl = 32;
+  static const double xs = 10;
+  static const double sm = 18;
+  static const double md = 24;
+  static const double lg = 32;
+  static const double xl = 40;
 }
 
 ThemeData buildViveroTheme(){

@@ -16,7 +16,7 @@ const List<Plant> plantasDemo = [
   Plant(
     nombre: 'Monstera',
     precio: '\$20.00',
-    rutaImagen: 'ImgPlants/01-montera-deliciosa.png',
+    rutaImagen: 'ImgPlants/01-monstera-deliciosa.png',
     categorias: 'Interior',
   ),
   Plant(

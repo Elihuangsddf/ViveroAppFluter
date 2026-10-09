@@ -13,7 +13,7 @@ class OnboardingScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(Icons.local_florist, size: 64, color: Colors.green),
+              Image.asset('ImgPlants/LogoSecundario.png', width: 200),
               const SizedBox(height: 24),
               const Text(
                 'Cultiva, aprende y crece',
