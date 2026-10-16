@@ -123,13 +123,23 @@ class PlantDetailsScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 22),
-                
+                _CareRow(
+                  icon: Icons.wb_sunny_outlined,
+                  title: 'Luz',
+                  detail: detalle['luz']!,
+                ),
+                const SizedBox(height: 12),
+                _CareRow(
+                  icon: Icons.water_drop_outlined,
+                  title: 'Riego',
+                  detail: detalle['riego']!,
+                ),
                 const SizedBox(height: 24),
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton.icon(
                     onPressed: () {
-                      context.read<CartProvider>().agregarAlCarrito();
+                      context.read<CartProvider>().agregarAlCarrito(nombrePlanta);
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(content: Text('$nombrePlanta agregada al carrito')),
                       );

@@ -20,22 +20,26 @@ class OnboardingScreen extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
-                  color: Color.fromARGB(255, 32, 118, 35)),
-                  textAlign: TextAlign.center,
+                  color: Color.fromARGB(255, 32, 118, 35),
+                ),
+                textAlign: TextAlign.center,
               ),
               const SizedBox(height: 12),
               const Text(
-                'Vivero+ te ayuda a comprar plantas y llevar el cuidado de tu jardin en un solo lugar.',
+                'Explora nuestro catálogo, conoce los cuidados disponibles y agrega plantas a tu carrito.',
                 style: TextStyle(fontSize: 15, color: Colors.grey),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 40),
-              ElevatedButton(onPressed: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => const HomeScreen()),
-                );
-              }, child: const Text('Comenzar')),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => const HomeScreen()),
+                  );
+                },
+                child: const Text('Comenzar'),
+              ),
             ],
           ),
         ),
