@@ -1,3 +1,7 @@
 {
-    "cmake.sourceDirectory": "C:/moviles_9A_2026/viveroa/linux"
+    "cmake.sourceDirectory": "C:/moviles_9A_2026/viveroa/linux",
+    "dart.flutterSdkPath": "C:/Users/elihu/develop/flutter-viveroa",
+    "terminal.integrated.env.windows": {
+        "Path": "C:\\Users\\elihu\\develop\\flutter-viveroa\\bin;${env:Path}"
+    }
 }

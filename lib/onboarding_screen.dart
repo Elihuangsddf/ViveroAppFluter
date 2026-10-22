@@ -1,4 +1,8 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+
+import 'auth_repository.dart';
+import 'auth_screen.dart';
 import 'home_screen.dart';
 
 class OnboardingScreen extends StatelessWidget {
@@ -33,9 +37,18 @@ class OnboardingScreen extends StatelessWidget {
               const SizedBox(height: 40),
               ElevatedButton(
                 onPressed: () {
+                  final Widget destino;
+                  if (kIsWeb ||
+                      defaultTargetPlatform == TargetPlatform.android) {
+                    destino = AuthRepository().currentUser == null
+                        ? const AuthScreen()
+                        : const HomeScreen();
+                  } else {
+                    destino = const HomeScreen();
+                  }
                   Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(builder: (context) => const HomeScreen()),
+                    MaterialPageRoute(builder: (context) => destino),
                   );
                 },
                 child: const Text('Comenzar'),
