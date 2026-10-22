@@ -43,3 +43,28 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Configuración local de Firebase y del editor
+/lib/firebase_options.dart
+/android/app/google-services.json
+/ios/Runner/GoogleService-Info.plist
+/macos/Runner/GoogleService-Info.plist
+/firebase.json
+/.firebaserc
+/.vscode/settings.json
+
+# Secretos y claves privadas (nunca incluirlos en la app cliente)
+.env
+.env.*
+!.env.example
+**/*serviceAccount*.json
+**/*service-account*.json
+**/*-firebase-adminsdk-*.json
+**/credentials.json
+*.pem
+*.p8
+*.p12
+*.mobileprovision
+**/*.keystore
+**/*.jks
+**/key.properties
