@@ -45,8 +45,9 @@ class _AuthScreenState extends State<AuthScreen> {
         await _auth.iniciarSesion(correo, contrasena);
       }
       if(!mounted) return;
-      Navigator.pushReplacement(context,
-      MaterialPageRoute(builder: (context) => const HomeScreen())
+      Navigator.pushAndRemoveUntil(context,
+      MaterialPageRoute(builder: (context) => const HomeScreen()),
+      (route) => false,
       );
     }on FirebaseAuthException catch (e) {
       setState(() => error = AuthRepository.mensajeDeError(e));

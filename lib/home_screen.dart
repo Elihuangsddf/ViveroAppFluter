@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'auth_repository.dart';
+import 'auth_screen.dart';
 
 import 'car_provider.dart';
 import 'catalogo_screen.dart';
@@ -30,6 +32,18 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         title: const Text('Vivero+'),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: () async {
+              await AuthRepository().cerrarSesion();
+              if (!mounted) return;
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => const AuthScreen()),
+                (route) => false,
+              );
+            },
+          ),
           Padding(
             padding: const EdgeInsets.only(right: 16),
             child: Center(
@@ -66,10 +80,17 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   const SizedBox(height: 8),
                   const Text(
-                    'Explora plantas para tu espacio',
+                    'Cuida tus planrtas, cultiva tu mente',
                     textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 16, color: Colors.grey),
                   ),
+                  
+                  SizedBox(height: 16),
+                  Text(AuthRepository().currentUser?.email ?? '',
+                  style: const TextStyle(fontSize: 24, color: Colors.green,
+                  fontWeight: FontWeight.bold),
+                  ),
+
                   const SizedBox(height: 24),
                   ElevatedButton.icon(
                     onPressed: () => Navigator.push(
@@ -104,6 +125,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     'Planta destacada: Monstera',
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
                   ),
+
+                  
+
                   const SizedBox(height: 12),
                   Wrap(
                     alignment: WrapAlignment.center,

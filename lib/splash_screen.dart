@@ -11,16 +11,26 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  final AuthRepository _auth = AuthRepository();
+
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(seconds: 3), () {
-      if (!mounted) return;
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const OnboardingScreen()),
-      );
-    });
+    _decidirDestino();
+  }
+  Future<void> _decidirDestino() async {
+    final sesionFuture = _auth.cambiosDeSesion.first;
+    await Future.delayed(const Duration(seconds: 2));
+    final usuario = await sesionFuture;
+    if (!mounted) return;
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => usuario != null
+            ? const HomeScreen()
+            : const OnboardingScreen(),
+      ),
+    );
   }
 
   @override
@@ -31,5 +41,5 @@ class _SplashScreenState extends State<SplashScreen> {
         child:Image.asset('ImgPlants/logoImg.png', width: 200, color: Colors.white),
         ),
     );
-  }    
   }
+}
