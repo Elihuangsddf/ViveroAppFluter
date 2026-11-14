@@ -1,19 +1,13 @@
 import 'package:flutter/material.dart';
+
 import 'core_theme.dart';
+import 'plant_model.dart';
 
 class PlantCard extends StatelessWidget {
-  final String nombre;
-  final String precio;
-  final String rutaImagen;
+  final Plant planta;
   final VoidCallback onTap;
 
-  const PlantCard({
-    super.key,
-    required this.nombre,
-    required this.precio,
-    required this.rutaImagen,
-    required this.onTap,
-  });
+  const PlantCard({super.key, required this.planta, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -41,13 +35,13 @@ class PlantCard extends StatelessWidget {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(14),
                 child: SizedBox.expand(
-                  child: Image.asset(rutaImagen, fit: BoxFit.cover),
+                  child: _PlantImage(path: planta.rutaImagen, fit: BoxFit.cover),
                 ),
               ),
             ),
             const SizedBox(height: 10),
             Text(
-              nombre,
+              planta.nombre,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: const TextStyle(
@@ -58,7 +52,7 @@ class PlantCard extends StatelessWidget {
             ),
             const SizedBox(height: 4),
             Text(
-              precio,
+              planta.precioTexto,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: const TextStyle(
@@ -69,6 +63,29 @@ class PlantCard extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _PlantImage extends StatelessWidget {
+  const _PlantImage({required this.path, this.fit});
+
+  final String path;
+  final BoxFit? fit;
+
+  @override
+  Widget build(BuildContext context) {
+    final uri = Uri.tryParse(path);
+    final isNetworkImage = uri != null &&
+        (uri.scheme == 'https' || uri.scheme == 'http');
+    return Image(
+      image: isNetworkImage ? NetworkImage(path) : AssetImage(path),
+      fit: fit,
+      errorBuilder: (context, error, stackTrace) => Container(
+        color: Colors.green.shade50,
+        alignment: Alignment.center,
+        child: const Icon(Icons.local_florist, size: 44, color: Colors.green),
       ),
     );
   }

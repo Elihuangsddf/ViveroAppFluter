@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import 'auth_repository.dart';
 import 'auth_screen.dart';
-
 import 'car_provider.dart';
 import 'catalogo_screen.dart';
 import 'plant_details_screen.dart';
+import 'plant_model.dart';
 import 'plant_repository.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -16,18 +17,18 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  static const _plantaDestacada = 'Monstera';
+  late final Future<List<Plant>> _plantasFuture;
   bool esFavorito = false;
 
-  void alternarFavorito() {
-    setState(() => esFavorito = !esFavorito);
+  @override
+  void initState() {
+    super.initState();
+    _plantasFuture = PlantRepository().obtenerPlantas();
   }
 
   @override
   Widget build(BuildContext context) {
     final carrito = context.watch<CartProvider>();
-    final totalPlantas = PlantRepository().obtenerPlantas().length;
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Vivero+'),
@@ -35,12 +36,12 @@ class _HomeScreenState extends State<HomeScreen> {
           IconButton(
             icon: const Icon(Icons.logout),
             onPressed: () async {
+              final navigator = Navigator.of(context);
               await AuthRepository().cerrarSesion();
               if (!mounted) return;
-              Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(builder: (context) => const AuthScreen()),
-                (route) => false,
+              navigator.pushAndRemoveUntil(
+                MaterialPageRoute(builder: (_) => const AuthScreen()),
+                (_) => false,
               );
             },
           ),
@@ -63,11 +64,7 @@ class _HomeScreenState extends State<HomeScreen> {
               constraints: const BoxConstraints(maxWidth: 600),
               child: Column(
                 children: [
-                  Image.asset(
-                    'ImgPlants/logoPrincipal.png',
-                    width: 220,
-                    height: 220,
-                  ),
+                  Image.asset('ImgPlants/logoPrincipal.png', width: 220, height: 220),
                   const SizedBox(height: 24),
                   const Text(
                     'Bienvenido a Vivero+',
@@ -80,100 +77,134 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   const SizedBox(height: 8),
                   const Text(
-                    'Cuida tus planrtas, cultiva tu mente',
+                    'Cuida tus plantas, cultiva tu mente',
                     textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 16, color: Colors.grey),
                   ),
-                  
-                  SizedBox(height: 16),
-                  Text(AuthRepository().currentUser?.email ?? '',
-                  style: const TextStyle(fontSize: 24, color: Colors.green,
-                  fontWeight: FontWeight.bold),
+                  const SizedBox(height: 16),
+                  Text(
+                    AuthRepository().currentUser?.email ?? '',
+                    style: const TextStyle(
+                      fontSize: 20,
+                      color: Colors.green,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-
                   const SizedBox(height: 24),
                   ElevatedButton.icon(
                     onPressed: () => Navigator.push(
                       context,
-                      MaterialPageRoute(
-                        builder: (context) => const CatalogoScreen(),
-                      ),
+                      MaterialPageRoute(builder: (_) => const CatalogoScreen()),
                     ),
                     icon: const Icon(Icons.store),
                     label: const Text('Ver catálogo'),
                   ),
                   const SizedBox(height: 24),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: StatCard(
-                          icon: Icons.local_florist,
-                          label: '$totalPlantas plantas en catálogo',
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: StatCard(
-                          icon: Icons.shopping_cart,
-                          label: '${carrito.cantidad} en carrito',
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 24),
-                  const Text(
-                    'Planta destacada: Monstera',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-                  ),
+                  FutureBuilder<List<Plant>>(
+                    future: _plantasFuture,
+                    builder: (context, snapshot) {
+                      final plantas = snapshot.data ?? const <Plant>[];
+                      Plant? destacada;
+                      for (final planta in plantas) {
+                        if (planta.nombre.toLowerCase().contains('monstera')) {
+                          destacada = planta;
+                          break;
+                        }
+                      }
+                      final plantaDestacada = destacada;
 
-                  
-
-                  const SizedBox(height: 12),
-                  Wrap(
-                    alignment: WrapAlignment.center,
-                    spacing: 12,
-                    runSpacing: 12,
-                    children: [
-                      ElevatedButton.icon(
-                        onPressed: alternarFavorito,
-                        icon: Icon(
-                          esFavorito ? Icons.favorite : Icons.favorite_border,
-                          color: esFavorito ? Colors.red : null,
-                        ),
-                        label: Text(
-                          esFavorito ? 'Monstera favorita' : 'Guardar Monstera',
-                        ),
-                      ),
-                      ElevatedButton.icon(
-                        onPressed: () => context
-                            .read<CartProvider>()
-                            .agregarAlCarrito(_plantaDestacada),
-                        icon: const Icon(Icons.add_shopping_cart),
-                        label: const Text('Agregar Monstera'),
-                      ),
-                      ElevatedButton.icon(
-                        onPressed: carrito.cantidadDe(_plantaDestacada) == 0
-                            ? null
-                            : () => context
-                                  .read<CartProvider>()
-                                  .eliminarDelCarrito(_plantaDestacada),
-                        icon: const Icon(Icons.remove_shopping_cart),
-                        label: const Text('Quitar Monstera'),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 12),
-                  TextButton(
-                    onPressed: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const PlantDetailsScreen(
-                          nombrePlanta: _plantaDestacada,
-                          rutaImagen: 'ImgPlants/01-monstera-deliciosa.png',
-                        ),
-                      ),
-                    ),
-                    child: const Text('Ver detalles de Monstera'),
+                      return Column(
+                        children: [
+                          Row(
+                            children: [
+                              Expanded(
+                                child: StatCard(
+                                  icon: Icons.local_florist,
+                                  label: snapshot.hasError
+                                      ? 'Catálogo no disponible'
+                                      : snapshot.connectionState == ConnectionState.done
+                                          ? '${plantas.length} plantas en catálogo'
+                                          : 'Cargando catálogo…',
+                                ),
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: StatCard(
+                                  icon: Icons.shopping_cart,
+                                  label: '${carrito.cantidad} en carrito',
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 24),
+                          if (plantaDestacada != null) ...[
+                            Text(
+                              'Planta destacada: ${plantaDestacada.nombre}',
+                              style: const TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            const SizedBox(height: 12),
+                            Wrap(
+                              alignment: WrapAlignment.center,
+                              spacing: 12,
+                              runSpacing: 12,
+                              children: [
+                                ElevatedButton.icon(
+                                  onPressed: () => setState(
+                                    () => esFavorito = !esFavorito,
+                                  ),
+                                  icon: Icon(
+                                    esFavorito ? Icons.favorite : Icons.favorite_border,
+                                    color: esFavorito ? Colors.red : null,
+                                  ),
+                                  label: Text(esFavorito
+                                      ? '${plantaDestacada.nombre} favorita'
+                                      : 'Guardar ${plantaDestacada.nombre}'),
+                                ),
+                                ElevatedButton.icon(
+                                  onPressed: () => context
+                                      .read<CartProvider>()
+                                      .agregarAlCarrito(plantaDestacada.id),
+                                  icon: const Icon(Icons.add_shopping_cart),
+                                  label: Text('Agregar ${plantaDestacada.nombre}'),
+                                ),
+                                ElevatedButton.icon(
+                                  onPressed: carrito.cantidadDe(plantaDestacada.id) == 0
+                                      ? null
+                                      : () => context
+                                          .read<CartProvider>()
+                                          .eliminarDelCarrito(plantaDestacada.id),
+                                  icon: const Icon(Icons.remove_shopping_cart),
+                                  label: Text('Quitar ${plantaDestacada.nombre}'),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 12),
+                            TextButton(
+                              onPressed: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => PlantDetailsScreen(
+                                    plantaId: plantaDestacada.id,
+                                    nombrePlanta: plantaDestacada.nombre,
+                                    rutaImagen: plantaDestacada.rutaImagen,
+                                    precio: plantaDestacada.precioTexto,
+                                    categoria: plantaDestacada.categoria,
+                                  ),
+                                ),
+                              ),
+                              child: Text('Ver detalles de ${plantaDestacada.nombre}'),
+                            ),
+                          ] else if (snapshot.connectionState == ConnectionState.done &&
+                              !snapshot.hasError)
+                            const Text('No hay una Monstera en el catálogo.'),
+                          if (snapshot.hasError)
+                            const Text('No se pudo cargar el catálogo.'),
+                        ],
+                      );
+                    },
                   ),
                 ],
               ),
