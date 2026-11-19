@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'car_provider.dart';
+import 'plant_image.dart';
 
 class PlantDetailsScreen extends StatelessWidget {
   static const Color _verdeDetalle = Color(0xFF087A4A);
@@ -25,10 +26,6 @@ class PlantDetailsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final carrito = context.watch<CartProvider>();
     final cantidad = carrito.cantidadDe(plantaId);
-    final uri = Uri.tryParse(rutaImagen);
-    final esImagenRemota =
-        uri != null && (uri.scheme == 'https' || uri.scheme == 'http');
-
     return Scaffold(
       backgroundColor: const Color(0xFFF7FAF5),
       appBar: AppBar(title: Text(nombrePlanta)),
@@ -47,19 +44,9 @@ class PlantDetailsScreen extends StatelessWidget {
                       aspectRatio: 1,
                       child: ColoredBox(
                         color: Colors.white,
-                        child: Image(
-                          image: esImagenRemota
-                              ? NetworkImage(rutaImagen)
-                              : AssetImage(rutaImagen),
+                        child: PlantImage(
+                          ruta: rutaImagen,
                           fit: BoxFit.contain,
-                          errorBuilder: (context, error, stackTrace) =>
-                              const Center(
-                                child: Icon(
-                                  Icons.image_not_supported_outlined,
-                                  size: 64,
-                                  color: _verdeDetalle,
-                                ),
-                              ),
                         ),
                       ),
                     ),

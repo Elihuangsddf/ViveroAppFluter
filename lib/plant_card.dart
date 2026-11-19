@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'core_theme.dart';
 import 'plant_model.dart';
+import 'plant_image.dart';
 
 class PlantCard extends StatelessWidget {
   final Plant planta;
@@ -35,7 +36,7 @@ class PlantCard extends StatelessWidget {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(14),
                 child: SizedBox.expand(
-                  child: _PlantImage(path: planta.rutaImagen, fit: BoxFit.cover),
+                  child: PlantImage(ruta: planta.rutaImagen),
                 ),
               ),
             ),
@@ -63,29 +64,6 @@ class PlantCard extends StatelessWidget {
             ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class _PlantImage extends StatelessWidget {
-  const _PlantImage({required this.path, this.fit});
-
-  final String path;
-  final BoxFit? fit;
-
-  @override
-  Widget build(BuildContext context) {
-    final uri = Uri.tryParse(path);
-    final isNetworkImage = uri != null &&
-        (uri.scheme == 'https' || uri.scheme == 'http');
-    return Image(
-      image: isNetworkImage ? NetworkImage(path) : AssetImage(path),
-      fit: fit,
-      errorBuilder: (context, error, stackTrace) => Container(
-        color: Colors.green.shade50,
-        alignment: Alignment.center,
-        child: const Icon(Icons.local_florist, size: 44, color: Colors.green),
       ),
     );
   }
